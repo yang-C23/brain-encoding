@@ -48,7 +48,7 @@ def main():
     print("data_model",data_model.shape)
     d_model = rsatoolbox.data.Dataset(data_model)   # 默认: observations×features
     rdm_model = rsatoolbox.rdm.calc_rdm(d_model)    # 得到一组(或一个) RDM 对象
-    print("rdm_model", rdm_model)
+    #print("rdm_model", rdm_model)
 
 
     # ============ 2) 加载语言区图，并创建掩码 ============
@@ -106,6 +106,7 @@ def main():
         n_timepoints = bold_data.shape[-1]
         brain_shape = bold_data.shape[:3]
         print("bold_data", bold_data.shape)
+        #print("brain_shape", brain_shape)
 
         # 3D -> 2D (T × voxels)，然后再应用语言区掩码
         # 注意：BOLD_data 是 (X, Y, Z, T)，转置后得到 (T, X, Y, Z)，再压平空间维度
@@ -114,9 +115,9 @@ def main():
         mask_1d = language_mask.ravel()
 
         bold_masked = bold_2d[:, mask_1d]               # shape: (T, masked_voxels)
+        print("bold_2d", bold_masked)
 
-
-        print("bold_masked", bold_masked)
+        #print("bold_masked", bold_masked)
         # 如果需要去除标准差为 0 的时间点，可以类似上面对 model HRF 的处理
         # stds_bold = np.std(bold_masked, axis=1)
         # zero_std_mask_bold = (stds_bold == 0)
@@ -130,6 +131,7 @@ def main():
         #     continue
 
         # 生成一个 rsatoolbox Dataset，observations=时间点，features=voxel
+
         d_brain = rsatoolbox.data.Dataset(bold_masked) 
         rdm_brain = rsatoolbox.rdm.calc_rdm(d_brain)  # 大脑 RDM
         
@@ -141,7 +143,7 @@ def main():
         rdm_corr = rsatoolbox.rdm.compare(rdm_brain, rdm_model, method='corr')
         # 注意 compare() 返回的是一个数组(如果两个 RDM 对象都只有1个RDM)，则一般是长度为1的数组
         # 所以我们取 [0] 取出具体相关值
-        print(rdm_corr.shape)
+        print("rdm_corr",rdm_corr)
         corr_val = float(rdm_corr[0])  # 如果 rdm_corr.shape == (1,)
         print(f"{sub_id} 与模型 RDM 的相关: {corr_val:.4f}")
 
