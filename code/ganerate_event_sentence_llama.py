@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import argparse
@@ -48,6 +47,7 @@ def main():
     print(f"Loading Llama2 model from {args.model} ...")
     # 修改后的代码片段（在加载分词器后添加两行）
     tokenizer = AutoTokenizer.from_pretrained(args.model, token=args.hf_token, trust_remote_code=True)
+    #tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
     # 添加以下两行代码
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token  # 使用结束符作为填充符
@@ -58,6 +58,14 @@ def main():
         token=args.hf_token,
         trust_remote_code=True
     )#.to(device)
+
+    # model = AutoModelForCausalLM.from_pretrained(
+    #     args.model,
+    #     torch_dtype=torch.float16,
+    #     device_map="auto",
+    #     trust_remote_code=True
+    # )#.to(device)
+
 
     with torch.no_grad():
         zero_count = 0
@@ -131,6 +139,9 @@ def main():
     events_array = np.hstack([onsets_arr,duration_arr, embeddings_arr])  # (N, 1+1+hidden_dim)
     print("events_array shape", events_array.shape)
     # Save to NPY
+    output_dir = os.path.dirname(args.output)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
     np.save(args.output, events_array)
     print(f"Saved events array shape={events_array.shape} to {args.output}")
 

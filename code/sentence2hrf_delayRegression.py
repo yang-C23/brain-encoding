@@ -1,11 +1,10 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import os
 import numpy as np
 import pandas as pd
-from nilearn.glm.first_level import spm_hrf
-import matplotlib.pyplot as plt
+#from nilearn.glm.first_level import spm_hrf
+#import matplotlib.pyplot as plt
 import sys
 import getopt
 

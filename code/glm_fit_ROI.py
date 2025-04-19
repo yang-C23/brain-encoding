@@ -39,6 +39,7 @@ def main():
     subject_dirs = glob.glob(os.path.join(args.derivatives_dir, f'sub-{lang}*'))
     subjects = [os.path.basename(d) for d in subject_dirs if os.path.isdir(d)]
     print(subjects)
+    print(args.hrf_csv)
     
     if not subjects:
         raise ValueError(f"未找到{lang}语言的被试数据")
